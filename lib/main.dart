@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/meal_details/meal_details.dart';
 import 'package:flutter_application_1/meals_screen.dart';
 import 'package:flutter_application_1/todo_app/views/main_screen.dart';
 import 'package:flutter_application_1/todo_app/views/tasks_screen.dart';
 
 void main() {
-  runApp(MaterialApp(home: MainScreen()));
+  runApp(MaterialApp(home: MealDetailsScreen()));
 }
 
 class MealScreenState extends State<StatefulWidget> {
