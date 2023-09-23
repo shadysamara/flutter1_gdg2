@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/todo_app/data/dummy_data.dart';
+import 'package:flutter_application_1/todo_app/controller/todo_provider.dart';
 import 'package:flutter_application_1/todo_app/data/task.dart';
 import 'package:flutter_application_1/todo_app/views/task_widget.dart';
+import 'package:provider/provider.dart';
 
 class CompeleteTasksScreen extends StatelessWidget {
-  Function fun;
-  CompeleteTasksScreen(this.fun);
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ListView.builder(
-        itemCount:
-            dataList.where((element) => (element.isComplete ?? false)).length,
-        itemBuilder: (c, i) {
-          Task task = dataList
-              .where((element) => (element.isComplete ?? false))
-              .toList()[i];
-          return TaskWidget(task, fun);
-        });
+    return Consumer<TodoProvider>(builder: (c, pr, w) {
+      return ListView.builder(
+          itemCount: pr.completeTasks.length,
+          itemBuilder: (c, i) {
+            return TaskWidget(pr.completeTasks[i]);
+          });
+    });
   }
 }

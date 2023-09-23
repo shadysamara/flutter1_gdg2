@@ -1,12 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/bnb_lesson/bnb_screen.dart';
+import 'package:flutter_application_1/call_back_assignment_solution/views/screens/main_meal_screen.dart';
 import 'package:flutter_application_1/meal_details/meal_details.dart';
 import 'package:flutter_application_1/meal_details/refactored_meal_details.dart';
-import 'package:flutter_application_1/meals_screen.dart';
+import 'package:flutter_application_1/call_back_assignment_solution/views/widgets/meals_widget.dart';
+import 'package:flutter_application_1/todo_app/controller/todo_provider.dart';
 import 'package:flutter_application_1/todo_app/views/main_screen.dart';
 import 'package:flutter_application_1/todo_app/views/tasks_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MaterialApp(home: RefactoredMealDetailsScreen()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<AppController>(create: (context) {
+      return AppController();
+    }),
+    ChangeNotifierProvider<TodoProvider>(create: (context) {
+      return TodoProvider();
+    }),
+  ], child: MyApp()));
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Selector<AppController, bool>(builder: (c, v, w) {
+      return MaterialApp(
+          theme: v ? ThemeData.dark() : ThemeData.light(), home: MainScreen());
+    }, selector: (context, pr) {
+      return pr.isDark;
+    });
+  }
 }
 
 class MealScreenState extends State<StatefulWidget> {
@@ -75,6 +98,7 @@ class ImageWidget extends StatelessWidget {
     );
   }
 }
+
 /*
 define list of map called meals that contains the following attributes
 - image as url
@@ -86,3 +110,11 @@ write the suitaable code to draw the ui
 
 
 */
+class AppController extends ChangeNotifier {
+  bool isDark = true;
+
+  toggleIsDark() {
+    isDark = !isDark;
+    notifyListeners();
+  }
+}

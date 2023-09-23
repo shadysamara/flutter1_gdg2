@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/todo_app/views/complete_tasks.dart';
 import 'package:flutter_application_1/todo_app/views/incomplete_tasks.dart';
 import 'package:flutter_application_1/todo_app/views/tasks_screen.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -9,10 +11,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  updateUi() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -20,6 +18,18 @@ class _MainScreenState extends State<MainScreen> {
       length: 3,
       child: Scaffold(
           appBar: AppBar(
+            actions: [
+              Selector<AppController, bool>(builder: (context, value, w) {
+                return Switch(
+                    value: value,
+                    onChanged: (v) {
+                      Provider.of<AppController>(context, listen: false)
+                          .toggleIsDark();
+                    });
+              }, selector: (context, provider) {
+                return provider.isDark;
+              })
+            ],
             title: Text("Main Page"),
             bottom: const TabBar(tabs: [
               Tab(
@@ -37,9 +47,9 @@ class _MainScreenState extends State<MainScreen> {
             ]),
           ),
           body: TabBarView(children: [
-            TasksScreen(updateUi),
-            CompeleteTasksScreen(updateUi),
-            InCompeleteTasksScreen(updateUi)
+            TasksScreen(),
+            CompeleteTasksScreen(),
+            InCompeleteTasksScreen()
           ])),
     );
   }

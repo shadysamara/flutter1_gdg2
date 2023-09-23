@@ -2,6 +2,7 @@ class MealModel {
   String? imageUrl;
   String? name;
   List<Content>? content;
+  bool isFav = false;
   MealModel(Map map) {
     imageUrl = map["image"];
     name = map["name"];
