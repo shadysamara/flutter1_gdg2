@@ -4,6 +4,11 @@ import 'package:flutter_application_1/call_back_assignment_solution/views/screen
 import 'package:flutter_application_1/meal_details/meal_details.dart';
 import 'package:flutter_application_1/meal_details/refactored_meal_details.dart';
 import 'package:flutter_application_1/call_back_assignment_solution/views/widgets/meals_widget.dart';
+import 'package:flutter_application_1/screens/app_router.dart';
+import 'package:flutter_application_1/screens/auth_provider.dart';
+import 'package:flutter_application_1/screens/pages_names.dart';
+import 'package:flutter_application_1/screens/screen1.dart';
+import 'package:flutter_application_1/screens/screen2.dart';
 import 'package:flutter_application_1/todo_app/controller/todo_provider.dart';
 import 'package:flutter_application_1/todo_app/views/main_screen.dart';
 import 'package:flutter_application_1/todo_app/views/tasks_screen.dart';
@@ -13,6 +18,9 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<AppController>(create: (context) {
       return AppController();
+    }),
+    Provider<AuthProvider>(create: (context) {
+      return AuthProvider();
     }),
     ChangeNotifierProvider<TodoProvider>(create: (context) {
       return TodoProvider();
@@ -25,7 +33,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Selector<AppController, bool>(builder: (c, v, w) {
       return MaterialApp(
-          theme: v ? ThemeData.dark() : ThemeData.light(), home: MainScreen());
+        navigatorKey: AppRouter.navKey,
+        routes: {
+          PagesNames.screen1Name: ((context) => Screen1()),
+          PagesNames.screen2Name: ((context) => Screen2())
+        },
+        theme: v ? ThemeData.dark() : ThemeData.light(),
+      );
     }, selector: (context, pr) {
       return pr.isDark;
     });
