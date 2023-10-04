@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/app_router.dart';
 import 'package:flutter_application_1/screens/pages_names.dart';
 import 'package:flutter_application_1/screens/screen2.dart';
+import 'package:flutter_application_1/screens/sp_example/data/sp_helper.dart';
 import 'package:string_validator/string_validator.dart';
 
 class AuthProvider {
@@ -11,7 +12,23 @@ class AuthProvider {
   TextEditingController passwordController = TextEditingController();
   String correctUsername = "omar";
   String correctPassword = "123";
+  String userNameInput = "";
+  String userPasswordInput = "";
+  String userEmailInput = "";
+  void setUserName(String? name) {
+    userNameInput = name ?? '';
+  }
+
+  void setUserEmail(String? name) {
+    userEmailInput = name ?? '';
+  }
+
+  void setUserPassword(String? value) {
+    userPasswordInput = value ?? '';
+  }
+
   checkLogin() {
+    formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
       String userName = userNameController.text;
       String password = passwordController.text;
@@ -43,5 +60,14 @@ class AuthProvider {
     }
   }
 
-  String? validatePassword(String? value) {}
+  String? validatePassword(String? value) {
+    // "omar@123" [A-Z]
+    RegExp regex =
+        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[@!#\$&*~]).{8,}$');
+    if (value?.isEmpty ?? true) {
+      return "* required field";
+    } else if (!regex.hasMatch(value!)) {
+      return "Weak Password";
+    }
+  }
 }

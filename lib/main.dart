@@ -9,18 +9,27 @@ import 'package:flutter_application_1/screens/auth_provider.dart';
 import 'package:flutter_application_1/screens/pages_names.dart';
 import 'package:flutter_application_1/screens/screen1.dart';
 import 'package:flutter_application_1/screens/screen2.dart';
+import 'package:flutter_application_1/screens/sp_example/data/sp_helper.dart';
+import 'package:flutter_application_1/screens/sp_example/providers/sp_provider.dart';
+import 'package:flutter_application_1/screens/sp_example/views/sp_screen.dart';
 import 'package:flutter_application_1/todo_app/controller/todo_provider.dart';
 import 'package:flutter_application_1/todo_app/views/main_screen.dart';
 import 'package:flutter_application_1/todo_app/views/tasks_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SpHelper.spHelper.initSp();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<AppController>(create: (context) {
       return AppController();
     }),
     Provider<AuthProvider>(create: (context) {
       return AuthProvider();
+    }),
+    ChangeNotifierProvider<SpProvider>(create: (context) {
+      return SpProvider();
     }),
     ChangeNotifierProvider<TodoProvider>(create: (context) {
       return TodoProvider();
@@ -32,13 +41,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<AppController, bool>(builder: (c, v, w) {
-      return MaterialApp(
-        navigatorKey: AppRouter.navKey,
-        routes: {
-          PagesNames.screen1Name: ((context) => Screen1()),
-          PagesNames.screen2Name: ((context) => Screen2())
+      return ScreenUtilInit(
+        designSize: const Size(375, 812),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, w) {
+          return MaterialApp(
+            navigatorKey: AppRouter.navKey,
+            routes: {
+              PagesNames.screen1Name: ((context) => Screen1()),
+              PagesNames.screen2Name: ((context) => Screen2())
+            },
+            theme: v ? ThemeData.dark() : ThemeData.light(),
+            home: SpScreen(),
+          );
         },
-        theme: v ? ThemeData.dark() : ThemeData.light(),
+        // child: Screen1(),
       );
     }, selector: (context, pr) {
       return pr.isDark;
